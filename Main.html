@@ -121,6 +121,35 @@ header {
     padding: 20px;
   }
 }
+
+.glass-request-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  padding: 12px 20px;
+  border-radius: 50px;
+
+  background: rgba(30, 30, 30, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+
+  transition: all 0.25s ease;
+  z-index: 9999;
+}
+
+.glass-request-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
 </style>
 
 <body>
@@ -130,6 +159,12 @@ header {
   <br>
   <input type="text" class="search-box" placeholder="Search movies..." onkeyup="searchMovies()">
 </header>
+
+<a href="https://sites.google.com/halifax.k12.va.us/rayray/tools/movie-request"
+   target="_blank"
+   class="glass-request-btn">
+   Movie Request
+</a>
 
 <div id="content"></div>
 
