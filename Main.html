@@ -150,6 +150,42 @@ header {
   background: rgba(255, 255, 255, 0.25);
   transform: scale(1.08);
 }
+
+/* TV SHOW DROPDOWN */
+.movie-card select {
+  width: 85%;
+  margin: 12px auto;
+  padding: 8px 12px;
+
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.4);
+
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+/* Hover effect */
+.movie-card select:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+/* When clicked */
+.movie-card select:focus {
+  border: 1px solid white;
+  background: rgba(255,255,255,0.25);
+}
+
+/* Dropdown options (inside list) */
+.movie-card select option {
+  color: black;
+  background: white;
+}
 </style>
 
 <body>
@@ -230,7 +266,30 @@ const movies = [
 
 
   // ===== TV SHows =====
-    { category: "TV Shows", title: "Blank", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/.jpg", link: "https://google.com" },
+  { 
+    category: "TV Shows",
+    title: "South Park",
+    poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/SP.jpg",
+    episodes: [
+    { name: "Episode 1", link: "https://drive.google.com/file/d/15FZ0sVCut_fbD_1C5hoJ81AfdjPlqk_r/preview" },
+    { name: "Episode 2", link: "https://drive.google.com/file/d/118-a1tQ4VODPxHyRNUKyLipD_LisPfnK/preview" },
+    { name: "Episode 3", link: "https://drive.google.com/file/d/1_CaWfRWB58qqSrowhalSdnpizgonSUax/preview" },
+    { name: "Episode 4", link: "https://drive.google.com/file/d/14VBLZI_iBtzItIBRwxb3mEHJRjegSM_-/preview" },
+    { name: "Episode 5", link: "https://drive.google.com/file/d/15tN_6LoJ0amNfmst2FywfbehUbLanzCG/preview" },
+    { name: "Episode 6", link: "https://drive.google.com/file/d/1Z8juvMgOWQtNZd9doxH0nh2cXfjgra6u/preview" },
+    { name: "Episode 7", link: "https://drive.google.com/file/d/1hD4Y31obXfZAqoV9bpLtCpTHosqe4KwJ/preview" },
+    { name: "Episode 8", link: "https://drive.google.com/file/d/14wzq0tzLa6sDq8bO3b7D-9omgERbolH_/preview" },
+    { name: "Episode 9", link: "https://drive.google.com/file/d/1svCaV0DZplJxCEn7M2AciuArkY40xeNY/preview" },
+    { name: "Episode 10", link: "https://drive.google.com/file/d/1ed3Vpa0dwMKWo2i8kMgbah7Y05DJm47r/preview" },
+    { name: "Episode 11", link: "https://drive.google.com/file/d/1PPKPvQu5BwQ7nhnfObrkqnLBpNvViqgd/preview" },
+    { name: "Episode 12", link: "https://drive.google.com/file/d/11z8yGOGJBovaz9haxaCWyBCy5upPqyO1/preview" },
+    { name: "Episode 13", link: "https://drive.google.com/file/d/1KTvehv6VGm9EDDh1lFoRRKoWmmPQifLQ/preview" },
+    { name: "Episode 14", link: "https://drive.google.com/file/d/1gO1h-h0L93VT4N7FQgqzDIiKFDGvpUgo/preview" },
+    { name: "Episode 15", link: "https://drive.google.com/file/d/18sw3Fb5W2hQACZvF9seidee_UscddT11/preview" },
+    { name: "Episode 16", link: "https://drive.google.com/file/d/18pFw1SL5mgY2NwVSqM1ncEKRC8bVuD7s/preview" },
+    { name: "Episode 17", link: "https://drive.google.com/file/d/1rHrveZs5V9xm--X2rQUCfi_oTncPJUWc/preview" },
+    ]
+  },
 
 ];
 
@@ -238,6 +297,7 @@ const content = document.getElementById("content");
 
 function loadMovies() {
   content.innerHTML = "";
+
   const categories = [...new Set(movies.map(m => m.category))];
 
   categories.forEach(cat => {
@@ -253,32 +313,70 @@ function loadMovies() {
       .forEach(m => {
         const card = document.createElement("div");
         card.className = "movie-card";
+
+        let controls = "";
+
+        // If TV Show with episodes
+        if (m.episodes) {
+          controls = `
+            <div style="text-align:center; padding:10px;">
+              <select onchange="handleEpisodeSelect(this)">
+                <option value="">Select Episode</option>
+                ${m.episodes.map(ep =>
+                  `<option value="${ep.link}">${ep.name}</option>`
+                ).join("")}
+              </select>
+            </div>
+          `;
+        }
+        // Regular movie
+        else {
+          controls = `
+            <div style="text-align:center;">
+              <button class="watch-btn" onclick="openVideo('${m.link}')">
+                Watch
+              </button>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
           <img src="${m.poster}">
           <h3>${m.title}</h3>
-          <div style="text-align:center;">
-            <button class="watch-btn" onclick="openVideo('${m.link}')">Watch</button>
-          </div>
+          ${controls}
         `;
+
         grid.appendChild(card);
       });
   });
 }
 
-function openVideo(link){
+function handleEpisodeSelect(selectElement) {
+  const link = selectElement.value;
+  if (link) {
+    openVideo(link);
+    selectElement.selectedIndex = 0; // reset dropdown
+  }
+}
+
+function openVideo(link) {
   document.getElementById("videoFrame").src = link;
   document.getElementById("videoModal").style.display = "flex";
 }
 
-function closeVideo(){
+function closeVideo() {
   document.getElementById("videoFrame").src = "";
   document.getElementById("videoModal").style.display = "none";
 }
 
-function searchMovies(){
+function searchMovies() {
   let input = document.querySelector(".search-box").value.toLowerCase();
-  document.querySelectorAll(".movie-card").forEach(card=>{
-    card.style.display = card.innerText.toLowerCase().includes(input) ? "block" : "none";
+
+  document.querySelectorAll(".movie-card").forEach(card => {
+    card.style.display =
+      card.innerText.toLowerCase().includes(input)
+        ? "block"
+        : "none";
   });
 }
 
