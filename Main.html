@@ -195,6 +195,189 @@ header > div:first-child {
   box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
 }
 
+/* DETAIL MODAL (Disney+ Style) */
+.detail-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+.detail-modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.detail-content {
+  background: linear-gradient(180deg, #1a1f3a 0%, #0a0e27 100%);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  margin-top: 20px;
+}
+
+.detail-poster {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  position: relative;
+}
+
+.detail-poster-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.detail-info {
+  padding: 30px;
+  position: relative;
+}
+
+.detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  color: white;
+}
+
+.detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.detail-stars {
+  color: #ffd700;
+  font-size: 16px;
+}
+
+.detail-genre {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.detail-genre span {
+  background: rgba(229, 9, 20, 0.2);
+  color: #e50914;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid rgba(229, 9, 20, 0.5);
+}
+
+.detail-description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-meta-item {
+  font-size: 12px;
+}
+
+.detail-meta-item label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.detail-meta-item value {
+  color: white;
+  font-size: 14px;
+  display: block;
+}
+
+.detail-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.detail-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.detail-btn-play {
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  color: white;
+}
+
+.detail-btn-play:hover {
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  transform: scale(1.02);
+}
+
+.detail-btn-more {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.detail-btn-more:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.detail-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.detail-close:hover {
+  background: rgba(229, 9, 20, 0.8);
+  transform: rotate(90deg);
+}
+
 /* MODAL PLAYER */
 .modal {
   display: none;
@@ -368,6 +551,44 @@ header > div:first-child {
   <iframe id="videoFrame" allow="autoplay"></iframe>
 </div>
 
+<div class="detail-modal" id="detailModal">
+  <div class="detail-content">
+    <button class="detail-close" onclick="closeDetail()">✖</button>
+    <img id="detailPoster" src="" alt="" class="detail-poster">
+    <div class="detail-info">
+      <h1 class="detail-title" id="detailTitle"></h1>
+      <div class="detail-rating">
+        <span class="detail-stars" id="detailStars">★★★★★</span>
+        <span id="detailRating">8.5/10</span>
+      </div>
+      <div class="detail-genre" id="detailGenre"></div>
+      <div class="detail-description" id="detailDescription"></div>
+      <div class="detail-meta">
+        <div class="detail-meta-item">
+          <label>Type</label>
+          <value id="detailType">TV Show</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Status</label>
+          <value id="detailStatus">Ongoing</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Episodes</label>
+          <value id="detailEpisodes">10</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Language</label>
+          <value id="detailLanguage">English</value>
+        </div>
+      </div>
+      <div class="detail-buttons">
+        <button class="detail-btn detail-btn-play" id="detailPlayBtn">Play</button>
+        <button class="detail-btn detail-btn-more">More Info</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 
 const movies = [
@@ -466,16 +687,28 @@ function loadMovies() {
 
     movies
       .filter(m => m.category === cat)
-      .forEach(m => {
+      .forEach((m, index) => {
         const card = document.createElement("div");
         card.className = "movie-card";
+        card.style.cursor = "pointer";
+        card.setAttribute("data-index", index);
+        card.setAttribute("data-show-data", JSON.stringify({
+          title: m.title,
+          poster: m.poster,
+          description: m.description || `${m.title} is a great show with amazing content.`,
+          rating: m.rating || 8.5,
+          genres: m.genres || ["Drama", "Sci-Fi"],
+          status: m.status || "Ongoing",
+          episodes: m.episodes?.length || 10,
+          language: m.language || "English"
+        }));
 
         let controls = "";
 
         // If TV Show with episodes
         if (m.episodes) {
           controls = `
-            <select onchange="handleEpisodeSelect(this)">
+            <select onchange="handleEpisodeSelect(this)" onclick="event.stopPropagation()">
               <option value="">Select Episode</option>
               ${m.episodes.map(ep =>
                 `<option value="${ep.link}">${ep.name}</option>`
@@ -500,6 +733,11 @@ function loadMovies() {
           </div>
         `;
 
+        // Add click handler AFTER setting innerHTML
+        if (m.episodes) {
+          card.onclick = () => showDetail(m);
+        }
+
         grid.appendChild(card);
       });
   });
@@ -509,7 +747,7 @@ function handleEpisodeSelect(selectElement) {
   const link = selectElement.value;
   if (link) {
     openVideo(link);
-    selectElement.selectedIndex = 0; // reset dropdown
+    selectElement.selectedIndex = 0;
   }
 }
 
@@ -523,6 +761,42 @@ function closeVideo() {
   document.getElementById("videoModal").style.display = "none";
 }
 
+function showDetail(show) {
+  const modal = document.getElementById("detailModal");
+  document.getElementById("detailPoster").src = show.poster;
+  document.getElementById("detailTitle").textContent = show.title;
+  document.getElementById("detailDescription").textContent = show.description || 
+    `${show.title} is a great show with amazing content. Watch all episodes now!`;
+  document.getElementById("detailStars").textContent = show.rating ? 
+    "★".repeat(Math.floor(show.rating / 2)) + "☆".repeat(5 - Math.floor(show.rating / 2)) : 
+    "★★★★★";
+  document.getElementById("detailRating").textContent = (show.rating || 8.5) + "/10";
+  
+  const genreHtml = (show.genres || ["Drama", "Sci-Fi"]).map(g => 
+    `<span>${g}</span>`
+  ).join("");
+  document.getElementById("detailGenre").innerHTML = genreHtml;
+  
+  document.getElementById("detailEpisodes").textContent = (show.episodes?.length || 10) + " Episodes";
+  document.getElementById("detailType").textContent = "TV Show";
+  document.getElementById("detailStatus").textContent = show.status || "Ongoing";
+  document.getElementById("detailLanguage").textContent = show.language || "English";
+  
+  const playBtn = document.getElementById("detailPlayBtn");
+  playBtn.onclick = () => {
+    if (show.episodes && show.episodes.length > 0) {
+      openVideo(show.episodes[0].link);
+    }
+  };
+  
+  modal.classList.add("active");
+}
+
+function closeDetail() {
+  const modal = document.getElementById("detailModal");
+  modal.classList.remove("active");
+}
+
 function searchMovies() {
   let input = document.querySelector(".search-box").value.toLowerCase();
 
@@ -534,11 +808,18 @@ function searchMovies() {
   });
 }
 
-loadMovies();
-
 </script>
 
 <script src="Tv.js"></script>
+
+<script>
+// Merge TV shows into movies array after Tv.js loads
+if (typeof tvShows !== 'undefined' && tvShows.length > 0) {
+  movies.push(...tvShows);
+}
+
+loadMovies();
+</script>
 
 </body>
 </html>
