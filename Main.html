@@ -7,86 +7,192 @@
 </head>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background:
-    linear-gradient(rgba(20,20,20,0.85), rgba(20,20,20,0.85)),
-    url("https://i.pinimg.com/originals/11/cf/ee/11cfeef9eaa56c71a6eeb9933f933492.gif")
-    center / cover fixed;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
   color: white;
+  min-height: 100vh;
 }
 
 /* HEADER */
 header {
-  padding: 20px;
-  text-align: center;
-  font-size: 60px;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.08);
-  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding: 15px 40px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+header > div:first-child {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .search-box {
-  margin-top: 10px;
   padding: 10px 20px;
-  width: 250px;
-  border-radius: 30px;
-  border: none;
+  width: 280px;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
   outline: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.search-box::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.search-box:focus {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
 }
 
 /* SECTIONS */
 .section {
-  margin: 40px;
+  margin: 50px 40px;
 }
 
 .section h2 {
-  margin-bottom: 15px;
+  margin: 0 0 25px 0;
+  font-size: 28px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  border-left: 4px solid #e50914;
+  padding-left: 15px;
+  position: relative;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #e50914, transparent);
 }
 
 .movie-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 24px;
+  padding: 10px;
 }
 
 /* MOVIE CARD */
 .movie-card {
-  border-radius: 20px;
+  position: relative;
+  border-radius: 8px;
   overflow: hidden;
-  backdrop-filter: blur(15px);
-  background: rgba(255,255,255,0.06);
-  transition: 0.3s;
+  background: #1a1f3a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .movie-card:hover {
-  transform: scale(1.08);
-  background: rgba(255,255,255,0.15);
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(229, 9, 20, 0.4);
 }
 
 .movie-card img {
   width: 100%;
-  height: 250px;
+  height: 240px;
   object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover img {
+  filter: brightness(0.7);
+}
+
+.movie-info {
+  padding: 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
 }
 
 .movie-card h3 {
-  padding: 10px;
-  font-size: 16px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
   text-align: center;
+  color: #fff;
+  line-height: 1.4;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Play button on hover */
+.movie-card::before {
+  content: '▶';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 40px;
+  color: #e50914;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+.movie-card:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
 }
 
 .watch-btn {
-  margin: 10px;
-  padding: 8px 15px;
-  border-radius: 15px;
+  margin-top: auto;
+  padding: 8px 16px;
+  border-radius: 4px;
   border: none;
-  background: white;
-  color: black;
-  font-weight: bold;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  color: white;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.watch-btn:hover {
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
 }
 
 /* MODAL PLAYER */
@@ -94,31 +200,85 @@ header {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.95);
+  background: rgba(0,0,0,0.98);
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .modal iframe {
   width: 90%;
   height: 80%;
-  border-radius: 20px;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 0 50px rgba(229, 9, 20, 0.3);
 }
 
 .close-btn {
   position: absolute;
   top: 30px;
   right: 40px;
-  font-size: 35px;
+  font-size: 40px;
   cursor: pointer;
+  color: #fff;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.close-btn:hover {
+  background: rgba(229, 9, 20, 0.8);
+  transform: rotate(90deg) scale(1.1);
 }
 
 /* MOBILE */
-@media(max-width: 600px) {
-  .featured {
-    margin: 20px;
-    padding: 20px;
+@media(max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .section {
+    margin: 30px 20px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .movie-card img {
+    height: 200px;
+  }
+
+  .modal iframe {
+    width: 95%;
+    height: 70%;
   }
 }
 
@@ -146,6 +306,7 @@ header {
   z-index: 9999;
 }
 
+
 .glass-request-btn:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: scale(1.08);
@@ -156,43 +317,41 @@ header {
   width: 85%;
   margin: 12px auto;
   padding: 8px 12px;
-
-  border-radius: 15px;
-  border: 1px solid rgba(255,255,255,0.4);
-
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(10px);
-
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: linear-gradient(135deg, #e50914, #f0631f);
   color: white;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
   outline: none;
-  transition: 0.25s ease;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Hover effect */
 .movie-card select:hover {
-  background: rgba(255,255,255,0.2);
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+  transform: scale(1.02);
 }
 
-/* When clicked */
 .movie-card select:focus {
-  border: 1px solid white;
-  background: rgba(255,255,255,0.25);
+  border: 1px solid #e50914;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
 }
 
-/* Dropdown options (inside list) */
 .movie-card select option {
-  color: black;
-  background: white;
+  color: white;
+  background: #1a1f3a;
 }
 </style>
 
 <body>
 
 <header>
-  Movies
-  <br>
+  <div>🎬 MOVIES</div>
   <input type="text" class="search-box" placeholder="Search movies..." onkeyup="searchMovies()">
 </header>
 
@@ -316,31 +475,29 @@ function loadMovies() {
         // If TV Show with episodes
         if (m.episodes) {
           controls = `
-            <div style="text-align:center; padding:10px;">
-              <select onchange="handleEpisodeSelect(this)">
-                <option value="">Select Episode</option>
-                ${m.episodes.map(ep =>
-                  `<option value="${ep.link}">${ep.name}</option>`
-                ).join("")}
-              </select>
-            </div>
+            <select onchange="handleEpisodeSelect(this)">
+              <option value="">Select Episode</option>
+              ${m.episodes.map(ep =>
+                `<option value="${ep.link}">${ep.name}</option>`
+              ).join("")}
+            </select>
           `;
         }
         // Regular movie
         else {
           controls = `
-            <div style="text-align:center;">
-              <button class="watch-btn" onclick="openVideo('${m.link}')">
-                Watch
-              </button>
-            </div>
+            <button class="watch-btn" onclick="openVideo('${m.link}')">
+              Watch
+            </button>
           `;
         }
 
         card.innerHTML = `
           <img src="${m.poster}">
-          <h3>${m.title}</h3>
-          ${controls}
+          <div class="movie-info">
+            <h3>${m.title}</h3>
+            ${controls}
+          </div>
         `;
 
         grid.appendChild(card);
