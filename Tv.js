@@ -1,6 +1,51 @@
 const tvShows = [
 
 // ===== TV SHows =====
+
+  {
+  category: "TV Shows",
+    title: "Rick & Morty",
+    poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/R&M.jpg",
+    episodes: [
+    { name: "Episode 1", link: "https://drive.google.com/file/d/1ymxehhlcEqpM0XUpaTh_0L3eIIA-m3BR/preview" },
+    { name: "Episode 2", link: "https://drive.google.com/file/d/1t-f3E_UFk1ssiYT0y8WZJdmVEXaD20r4/preview" },
+    { name: "Episode 3", link: "https://drive.google.com/file/d/1TAjLdswDOm_RSjkqKblvKnSYxr1HrfbJ/preview" },
+    { name: "Episode 4", link: "https://drive.google.com/file/d/1Ud7Vb2sPKYzvNCH9YP6FD5Y5C3FV_DLZ/preview" },
+    { name: "Episode 5", link: "https://drive.google.com/file/d/1l7F3flwDDp2gitiP1xmQT2fTONYD4sW6/preview" },
+    { name: "Episode 6", link: "https://drive.google.com/file/d/13fv9l8jTLBytl1GGkNkQS7qXvFzEB_v9/preview" },
+    { name: "Episode 7", link: "https://drive.google.com/file/d/1biyC9iUovzSHJRC1MoMtQ5-64JKEQU9z/preview" },
+    { name: "Episode 8", link: "https://drive.google.com/file/d/1_w_4cfYTj33J1zGlFfolxre8WX3dpQHD/preview" },
+    { name: "Episode 9", link: "https://drive.google.com/file/d/1RuUkwpROzT0431pRc0dNyvX6o1aH33N_/preview" },
+    { name: "Episode 10", link: "https://drive.google.com/file/d/17cA1rPhgvO4AwTid_LptKxhjMMJvL7J_/preview" },
+    { name: "Episode 11", link: "https://drive.google.com/file/d/1epV0Hkxau3M-uZUYq_bBwuuAvd7oj7cI/preview" },
+    // Season 2
+    { name: "Episode 12", link: "https://drive.google.com/file/d/1JfMBnuZB0pNzFzzBFlL-4AYyBsj0oPiB/preview" },
+    { name: "Episode 13", link: "https://drive.google.com/file/d/1r79EsIO-I4mzMX-XdObIsE0qGNZZ36Yf/preview" },
+    { name: "Episode 14", link: "https://drive.google.com/file/d/1xbYlmLyoZhfj8z5ndB1BBpK2zpEFq2d5/preview" },
+    { name: "Episode 15", link: "https://drive.google.com/file/d/1HqUXtxEqBU-DTfk-f1XLQondwNznzOkF/preview" },
+    { name: "Episode 16", link: "https://drive.google.com/file/d/1ifh41YU8Yem6PT88ejYywjuCp7y3Coik/preview" },
+    { name: "Episode 17", link: "https://drive.google.com/file/d/1H9LjieaQ9POgjuNdWD4Ofky-hFc3N0YL/preview" },
+    { name: "Episode 18", link: "https://drive.google.com/file/d/1jswB7G0RJjhUgnRWs-ax9gUr2Jcn1FdA/preview" },
+    { name: "Episode 19", link: "https://drive.google.com/file/d/1TLvdH3lL6n7MaC56a4-k3uAY02sc07yh/preview" },
+    { name: "Episode 20", link: "https://drive.google.com/file/d/1GhwEN93ffd-OOGmzc5r0ddAPKri3lBzZ/preview" },
+    { name: "Episode 21", link: "https://drive.google.com/file/d/1fRFVWkmP5FUOebidfLwZaOFPl0bgKwWi/previewk" },
+    // Season 3
+    { name: "Episode 22", link: "https://drive.google.com/file/d/1rCAnT1pqcd0EXUSo5CkPPVEoh6lUaLKb/preview" },
+    { name: "Episode 23", link: "https://drive.google.com/file/d/15eXukhGRJQQ12u_J70J3pfGwWp9FS9Z_/preview" },
+    { name: "Episode 24", link: "https://drive.google.com/file/d/10U8FYBGLdekQVPQVeY7pyiyeVxvDOd2y/preview" },
+    { name: "Episode 25", link: "https://drive.google.com/file/d/1nclc6AIuzQyYXAUfUO2OgPBAMCaQ4F3g/preview" },
+    { name: "Episode 26", link: "https://drive.google.com/file/d/1pJuQ7uBV4-b9UT7j1iwBRUSA52Shkh7P/preview" },
+    { name: "Episode 27", link: "https://drive.google.com/file/d/1xrdfy_bvzQ2RwgVLMboZvmuYWwV86eyE/preview" },
+    { name: "Episode 28", link: "https://drive.google.com/file/d/1-TLOvkzdi3XNqPFbhvwmCCGT6S9FVNeg/preview" },
+    { name: "Episode 29", link: "https://drive.google.com/file/d/1WjQOq4nly7XTJQBgS2HE1CoIOaKlGk7K/preview" },
+    { name: "Episode 30", link: "https://drive.google.com/file/d/1-fhldDsi4f1ovpZ_Kx1ImbE2IuJNVdWZ/preview" },
+    { name: "Episode 31", link: "https://drive.google.com/file/d/1e5YKLF8Fd6DnUUwgOmtJ5Gh0vA4KNWOa/preview" },
+    //Season 4
+    //Next is S04 Ep 01
+    //EX:{ name: "Episode ?", link: "Blank" },
+    ]
+  },
+
   { 
     category: "TV Shows",
     title: "South Park",
