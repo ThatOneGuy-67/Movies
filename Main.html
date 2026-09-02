@@ -573,6 +573,10 @@ header > div:first-child {
           <value id="detailStatus">Ongoing</value>
         </div>
         <div class="detail-meta-item">
+          <label>Status</label>
+          <value id="detailStatus">Finished</value>
+        </div>
+        <div class="detail-meta-item">
           <label>Episodes</label>
           <value id="detailEpisodes">10</value>
         </div>
@@ -780,7 +784,21 @@ function showDetail(show) {
   document.getElementById("detailEpisodes").textContent = (show.episodes?.length || 10) + " Episodes";
   document.getElementById("detailType").textContent = "TV Show";
   document.getElementById("detailStatus").textContent = show.status || "Ongoing";
+  document.getElementById("detailStatus").textContent = show.status || "Finished";
   document.getElementById("detailLanguage").textContent = show.language || "English";
+
+  if (show.episodes && show.episodes.length > 0) {
+    const episodeSelect = document.createElement("select");
+    episodeSelect.innerHTML = `<option value="">Select Episode</option>` + 
+      show.episodes.map(ep => `<option value="${ep.link}">${ep.name}</option>`).join("");
+    episodeSelect.onchange = () => {
+      if (episodeSelect.value) {
+        openVideo(episodeSelect.value);
+        episodeSelect.selectedIndex = 0;
+      }
+    };
+    document.querySelector(".detail-buttons").appendChild(episodeSelect);
+  }
   
   const playBtn = document.getElementById("detailPlayBtn");
   playBtn.onclick = () => {
