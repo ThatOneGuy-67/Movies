@@ -1,15 +1,846 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Snoopy’s Movies</title>
+  <base href="https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="TOG's Movies is a website that provides a collection of movies and TV shows for streaming.">
+<meta charset="UTF-8">
+<title>Movies</title>
 </head>
-<body style="margin:0">
 
-<iframe
-  src="Main.html"
-  style="width:100%;height:100vh;border:none;">
-</iframe>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+  color: white;
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  padding: 15px 40px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+header > div:first-child {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.search-box {
+  padding: 10px 20px;
+  width: 280px;
+  border-radius: 25px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.1);
+  color: white;
+  font-size: 14px;
+  outline: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.search-box::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.search-box:focus {
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+/* SECTIONS */
+.section {
+  margin: 50px 40px;
+}
+
+.section h2 {
+  margin: 0 0 25px 0;
+  font-size: 28px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  border-left: 4px solid #e50914;
+  padding-left: 15px;
+  position: relative;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #e50914, transparent);
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 24px;
+  padding: 10px;
+}
+
+/* MOVIE CARD */
+.movie-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1a1f3a;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-card:hover {
+  transform: translateY(-8px) scale(1.05);
+  box-shadow: 0 12px 30px rgba(229, 9, 20, 0.4);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover img {
+  filter: brightness(0.7);
+}
+
+.movie-info {
+  padding: 12px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(180deg, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+}
+
+.movie-card h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  color: #fff;
+  line-height: 1.4;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Play button on hover */
+.movie-card::before {
+  content: '▶';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 40px;
+  color: #e50914;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 10;
+  text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+}
+
+.movie-card:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+.watch-btn {
+  margin-top: auto;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.watch-btn:hover {
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);
+}
+
+/* DETAIL MODAL (Disney+ Style) */
+.detail-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 999;
+  animation: fadeIn 0.3s ease;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+
+.detail-modal.active {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.detail-content {
+  background: linear-gradient(180deg, #1a1f3a 0%, #0a0e27 100%);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+  margin-top: 20px;
+}
+
+.detail-poster {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  position: relative;
+}
+
+.detail-poster-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.detail-info {
+  padding: 30px;
+  position: relative;
+}
+
+.detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  color: white;
+}
+
+.detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.detail-stars {
+  color: #ffd700;
+  font-size: 16px;
+}
+
+.detail-genre {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.detail-genre span {
+  background: rgba(229, 9, 20, 0.2);
+  color: #e50914;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 1px solid rgba(229, 9, 20, 0.5);
+}
+
+.detail-description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-meta-item {
+  font-size: 12px;
+}
+
+.detail-meta-item label {
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.detail-meta-item value {
+  color: white;
+  font-size: 14px;
+  display: block;
+}
+
+.detail-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.detail-btn {
+  flex: 1;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.detail-btn-play {
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  color: white;
+}
+
+.detail-btn-play:hover {
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  transform: scale(1.02);
+}
+
+.detail-btn-more {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.detail-btn-more:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.detail-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.detail-close:hover {
+  background: rgba(229, 9, 20, 0.8);
+  transform: rotate(90deg);
+}
+
+/* MODAL PLAYER */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.98);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal iframe {
+  width: 90%;
+  height: 80%;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 0 50px rgba(229, 9, 20, 0.3);
+}
+
+.close-btn {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 40px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.3s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.close-btn:hover {
+  background: rgba(229, 9, 20, 0.8);
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* MOBILE */
+@media(max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .section {
+    margin: 30px 20px;
+  }
+
+  .section h2 {
+    font-size: 22px;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+  }
+
+  .movie-card img {
+    height: 200px;
+  }
+
+  .modal iframe {
+    width: 95%;
+    height: 70%;
+  }
+}
+
+.glass-request-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  padding: 12px 20px;
+  border-radius: 50px;
+
+  background: rgba(30, 30, 30, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  text-decoration: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+
+  transition: all 0.25s ease;
+  z-index: 9999;
+}
+
+
+.glass-request-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.08);
+}
+
+/* TV SHOW DROPDOWN */
+.movie-card select {
+  width: 85%;
+  margin: 12px auto;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.movie-card select:hover {
+  background: linear-gradient(135deg, #f0631f, #e50914);
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+  transform: scale(1.02);
+}
+
+.movie-card select:focus {
+  border: 1px solid #e50914;
+  background: linear-gradient(135deg, #e50914, #f0631f);
+  box-shadow: 0 0 15px rgba(229, 9, 20, 0.5);
+}
+
+.movie-card select option {
+  color: white;
+  background: #1a1f3a;
+}
+</style>
+
+<body>
+
+<header>
+  <div>🎬 MOVIES</div>
+  <input type="text" class="search-box" placeholder="Search movies..." onkeyup="searchMovies()">
+</header>
+
+<a href="https://sites.google.com/view/snoopyshub/tools/movie-request"
+   target="_blank"
+   class="glass-request-btn">
+   Movie Request
+</a>
+
+<div id="content"></div>
+
+<div class="modal" id="videoModal">
+  <span class="close-btn" onclick="closeVideo()">✖</span>
+  <iframe id="videoFrame" allow="autoplay"></iframe>
+</div>
+
+<div class="detail-modal" id="detailModal">
+  <div class="detail-content">
+    <button class="detail-close" onclick="closeDetail()">✖</button>
+    <img id="detailPoster" src="" alt="" class="detail-poster">
+    <div class="detail-info">
+      <h1 class="detail-title" id="detailTitle"></h1>
+      <div class="detail-rating">
+        <span class="detail-stars" id="detailStars">★★★★★</span>
+        <span id="detailRating">8.5/10</span>
+      </div>
+      <div class="detail-genre" id="detailGenre"></div>
+      <div class="detail-description" id="detailDescription"></div>
+      <div class="detail-meta">
+        <div class="detail-meta-item">
+          <label>Type</label>
+          <value id="detailType">TV Show</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Status</label>
+          <value id="detailStatus">Ongoing</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Status</label>
+          <value id="detailStatus">Finished</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Episodes</label>
+          <value id="detailEpisodes">10</value>
+        </div>
+        <div class="detail-meta-item">
+          <label>Language</label>
+          <value id="detailLanguage">English</value>
+        </div>
+      </div>
+      <div class="detail-buttons">
+        <button class="detail-btn detail-btn-play" id="detailPlayBtn">Play</button>
+        <button class="detail-btn detail-btn-more">More Info</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const movies = [
+  
+  // ===== Feaatured Movies =====
+  { category: "Movies", title: "Minions & Monsters", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M&M.jpg", link: "https://drive.google.com/file/d/1yMeQYZLAS9g-UHSrcIgnqFeEkRowcKoS/preview" },
+  { category: "Movies", title: "The Odyssey", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TOY.jpg", link: "https://drive.google.com/file/d/1ZWEQ9sefcNmwWKRlzCgx96gNzMSpI2iQ/preview" },
+  { category: "Movies", title: "Mandalorian & Grogu", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M&G.jpg", link: "https://drive.google.com/file/d/1UnyY2wGYTKBGGp0Rzyq39w7KSohR8rV1/preview" },
+  { category: "Movies", title: "Supergirl", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/SG.jpg", link: "https://drive.google.com/file/d/1xImTiJvYDMzbkOMl8jsw7_HG2ekNxfbu/preview" },
+  { category: "Movies", title: "Obsession", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/O.jpg", link: "https://drive.google.com/file/d/1mBFA9N5xBd4tC4yDtw4agAAQtwiy3T9F/preview" },
+  { category: "Movies", title: "Mutiny", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M.jpg", link: "https://drive.google.com/file/d/1OvoBicJBDmB7Yh0wqsDSbOWb3-RitDho/preview" },
+  { category: "Movies", title: "Backrooms", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/BR.jpg", link: "https://drive.google.com/file/d/1iEETRhLjAGSlkyRAx4SMYgBaklHL1cob/preview" },
+  { category: "Movies", title: "Cars", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Cars.jpg", link: "https://drive.google.com/file/d/1PHbwDSv_nzy9KVoRn9561Le-6-C2uUQa/preview" },
+  { category: "Movies", title: "Cars 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Cars2.jpg", link: "https://drive.google.com/file/d/1V_NqIAHOgKjhklWQO7XzC8ideK4LOe6n/preview" },
+  { category: "Movies", title: "Cars 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Cars3.jpg", link: "https://drive.google.com/file/d/1pv9o7dvaM04DYqWrAOCz_0DfQztn9At8/preview" },
+  { category: "Movies", title: "Minions Rise of Gru", poster: "https://image.tmdb.org/t/p/w500/wKiOkZTN9lUUUNZLmtnwubZYONg.jpg", link: "https://drive.google.com/file/d/1PUAJDEIDgsH_cLUWN2tgPdWAuINXQ9fm/preview" },
+  { category: "Movies", title: "Minions", poster: "https://image.tmdb.org/t/p/w500/vlOgaxUiMOA8sPDG9n3VhQabnEi.jpg", link: "https://drive.google.com/file/d/1ZJWkqS6Y5XO6bRrgCH88rgQZR848Lr8V/preview" },
+  { category: "Movies", title: "Despicable Me", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/DM1.jpg", link: "https://drive.google.com/file/d/1KDDDkhqdiwnoXUw9aYc4WdBfprqPX6pE/preview" },
+  { category: "Movies", title: "Despicable Me 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/DM2.jpg", link: "https://drive.google.com/file/d/1bTG8tnEKRvWZnnwNRrHSwOC028Rr_Mrg/preview" },
+  { category: "Movies", title: "Despicable Me 3", poster: "https://image.tmdb.org/t/p/w500/5qcUGqWoWhEsoQwNUrtf3y3fcWn.jpg", link: "https://drive.google.com/file/d/1W_Wr8yBmz_lTq3c80Vqj1ZySqXHiQ6mF/preview" },
+  { category: "Movies", title: "Despicable Me 4", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/DM4.jpg", link: "https://drive.google.com/file/d/1JsSBIKKu_X01QmDTieSiZVkvYheSJ2tR/preview" },
+  { category: "Movies", title: "Spider-Man", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Spider-man1.jpg", link: "https://drive.google.com/file/d/14BaJhmDRr3veoH436CKdPDp9r-j5214I/preview" },
+  { category: "Movies", title: "Spider-Man 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Spider-man2.jpg", link: "https://drive.google.com/file/d/1BJTsBEOeTbpv3fqU0ejzb44aQGrdLhyN/preview" },
+  { category: "Movies", title: "Spider-Man 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Spider-man3.jpg", link: "https://drive.google.com/file/d/1vi0w7U65XeR-u00AQ8uS9s3C-IoiV-_1/preview" },
+  { category: "Movies", title: "The Amazing Spider-Man", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TASM2.jpg", link: "https://drive.google.com/file/d/1GLmG41OhRt9YfRa4r5nwvw8hCIS1Sofv/preview" },
+  { category: "Movies", title: "Spider-Man Homecoming", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Homecome.jpg", link: "https://drive.google.com/file/d/1H6yP8ItXHjAT69uL8CTAlvi90sPx2399/preview" },
+  { category: "Movies", title: "Spider-Man Far From Home", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Nowayhome.jpg", link: "https://drive.google.com/file/d/1YFUpSLmxb6xIlbdJXScIkRYvwYxvJ_18/preview" },
+  { category: "Movies", title: "Spider-Man No Way Home", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Farhome.jpg", link: "https://drive.google.com/file/d/1oddQM8w-8UqQIvB-fPpy1h-7xvAbklmA/preview" },
+  { category: "Movies", title: "Happy Gilmore", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Happy1.jpg", link: "https://drive.google.com/file/d/1gYN4tRLGwAiPGF8hoJZYPzbw9vy0SYOW/preview" },
+  { category: "Movies", title: "Happy Gilmore 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Happy2.jpg", link: "https://drive.google.com/file/d/14hjVDymHdN8ufDZcmakf5BTgghWyadUP/preview" },
+  { category: "Movies", title: "Ted", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Ted1.jpg", link: "https://drive.google.com/file/d/1L2VeVmHqz7ORuLVsjUgRyxCwxYJUIDK1/preview" },
+  { category: "Movies", title: "Ted 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Ted2.jpg", link: "https://drive.google.com/file/d/1NUcOKG5lw0wOApPIBMyVAZgsHMti7OfB/preview" },
+  { category: "Movies", title: "Top Gun", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Top1.jpg", link: "https://drive.google.com/file/d/1YPdexiO1cHulGguqGvHKq0Grsnpdlbs1/preview" },
+  { category: "Movies", title: "Top Gun Maverick", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Top2.jpg", link: "https://drive.google.com/file/d/1nmGDHktR96jkaYl2lf-d-XTtNtFh4PTv/preview" },
+  { category: "Movies", title: "Terrifier", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/T1.jpg", link: "https://drive.google.com/file/d/1XA3uAA3wNg6W_RzOycD6q3FxUHF8NneP/preview" },
+  { category: "Movies", title: "Terrifier 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/T2.jpg", link: "https://drive.google.com/file/d/14ASzZ0F8z8jyOT6qL5D3xvjtHHl8Jjmh/preview" },
+  { category: "Movies", title: "Interstellar", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/INTER.jpg", link: "https://drive.google.com/file/d/1XQprw1tRflHUZ-cNl97ODxs9U5DvYAf-/preview" },
+  { category: "Movies", title: "Forest Gump", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/FG.jpg", link: "https://drive.google.com/file/d/0B-uFeCO4yCFIa3hNRDc5eVlBSjQ/preview?resourcekey=0-rOslYKb17fIDWtuiy8P2ag" },
+  { category: "Movies", title: "Batman The Dark Knight", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/BMDK.jpg", link: "https://drive.google.com/file/d/1_g_fq1MEbqXuapY_dxXSdohAx8zmxwOX/preview" },
+  { category: "Movies", title: "Michael Jackson", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/MJ.jpg", link: "https://drive.google.com/file/d/1OqJ14L50E0wHdYrTq6M5cEFoUjGl6ENB/preview" },
+  { category: "Movies", title: "Iron Man", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/IM.jpg", link: "https://drive.google.com/file/d/1hXLafjnc_ersgtAKJeU8QX4siWEtDmv9/preview" },
+  { category: "Movies", title: "Iron Man 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/IM2.jpg", link: "https://drive.google.com/file/d/1u1glpdPyZvJ1MAgTrxAnTrS8Wvys3Bdt/preview" },
+  { category: "Movies", title: "Iron Man 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/IM3.jpg", link: "https://drive.google.com/file/d/1I3cDTsDBihDYId6KuKS6ighOcJ5g6oyC/preview" },
+  { category: "Movies", title: "Lego Batman", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/LBM.jpg", link: "https://drive.google.com/file/d/1UHudB_eiOULAEGYcbjb7QbhEl7dIGOHn/preview" },
+  { category: "Movies", title: "Space Jam A New Legacy", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/SJ.jpg", link: "https://drive.google.com/file/d/1v2xqKQcAvndfcqsctZH73NR2AjFXsrUr/preview" },
+  { category: "Movies", title: "Zootopia 1", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Z1.jpg", link: "https://drive.google.com/file/d/1HYeIrbf8A-vfvJsvYP59AQzG9l8nt03h/preview" },
+  { category: "Movies", title: "Zootopia 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Z2.jpg", link: "https://drive.google.com/file/d/10lys4xAmzALt_F081ej_9oP3i7Lm1Qgq/preview" },
+  { category: "Movies", title: "Super Mario Movie", poster: "https://image.tmdb.org/t/p/w500/qNBAXBIQlnOThrVvA6mA2B5ggV6.jpg", link: "https://drive.google.com/file/d/1OsyF2LKJqjtv0b2Xd9GWOLcYkzny3VZo/preview" },
+  { category: "Movies", title: "Sonic 2", poster: "https://image.tmdb.org/t/p/w500/6DrHO1jr3qVrViUO6s6kFiAGM7.jpg", link: "https://drive.google.com/file/d/13YPdlfR1BTzXfqwmfbzfiuPycjQsh0Yb/preview" },
+  { category: "Movies", title: "Shrek", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Shrek1.jpg", link: "https://drive.google.com/file/d/1NezVaMIuVH1Gt0cHCQMT3JeJu7JuxlIG/preview" },
+  { category: "Movies", title: "Shrek 2", poster: "https://image.tmdb.org/t/p/w500/2yYP0PQjG8zVqturh1BAqu2Tixl.jpg", link: "https://drive.google.com/file/d/1vdJn0f2xjmS-BLaxPNzSlh1v2FJPnOzM/preview" },
+  { category: "Movies", title: "Shrek 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Shrek3.jpg", link: "https://drive.google.com/file/d/1sJwO8a7Kj0MrqDqJAKYwzEEfMFhp8TDa/preview" },
+  { category: "Movies", title: "Toy Story", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TY1.jpg", link: "https://drive.google.com/file/d/1fW6Ov5NIaRh4h78-qBpWeln_Vs9oEXOQ/preview" },
+  { category: "Movies", title: "Toy Story 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TY2.jpg", link: "https://drive.google.com/file/d/1k3RVDc_Vah1H9lFsXQZJ6mE3KqdDcK_T/preview" },
+  { category: "Movies", title: "Toy Story 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TY3.jpg", link: "https://drive.google.com/file/d/13msxxmyEco7CRBkO_Ju1SMx5KK4r4Su8/preview" },
+  { category: "Movies", title: "Toy Story 4", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TY4.jpg", link: "https://drive.google.com/file/d/1bFUbsQ9VEazeCt5l_VBVDtjCsbJmZ_Vr/preview" },
+  { category: "Movies", title: "Toy Story 5", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/TY5.jpg", link: "http://drive.google.com/file/d/1ubdX6AHmMzsPEZpq0_W3k7cQVS_yCtJI/preview" },
+  { category: "Movies", title: "The Bee Movie", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Bee.jpg", link: "https://drive.google.com/file/d/1AiuhAubyrKVmqpu3OfM1sonhRJrzw5v6/preview" },
+  { category: "Movies", title: "Madagascar", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M1.jpg", link: "https://drive.google.com/file/d/196K316u0XQEOAwqXtkdExoUQfoppiRxF/preview" },
+  { category: "Movies", title: "Madagascar 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M2.jpg", link: "https://drive.google.com/file/d/1a3rIw-VQOIyJZ_rhHQLDA1p-llmcAF4n/preview" },
+  { category: "Movies", title: "Madagascar 3", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/M3.jpg", link: "https://drive.google.com/file/d/1tW6ZjkTVwn3Cu2VQbxtg42ytyD_VZxVQ/preview" },
+  { category: "Movies", title: "Merry Madagascar", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/MM.jpg", link: "https://drive.google.com/file/d/1ybFx8M1h9cKptrMtcNNAqKErdOLIYydc/preview" },
+  { category: "Movies", title: "Penguins Madagascar", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/PM.jpg", link: "https://drive.google.com/file/d/1LCggfjj6jPUyz3ZSBJQidb0jB-kvovKl/preview" },
+  { category: "Movies", title: "Madly Madagascar", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/MadM.jpg", link: "https://drive.google.com/file/d/1kgjMwQAMhczUrYKoYBDoe_tt11K9_Bki/preview" },
+  { category: "Movies", title: "The Lorax", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Lorax.jpg", link: "https://drive.google.com/file/d/1Kl4ieKALPoEYbllsRy7V8AYiPtJATg7W/preview" },
+  { category: "Movies", title: "Kang-Fu Panda", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/KFP1.jpg", link: "https://docs.google.com/file/d/0B5QJgBuViQvxMExwdFd4LXp1cjQ/preview" },
+  { category: "Movies", title: "Kang-Fu Panda 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/KFP2.jpg", link: "https://docs.google.com/file/d/0B8hMCZDfMkRvcW9fSWV1aHZ3Vzg/preview" },
+  { category: "Movies", title: "The Wild Robot", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/WR.jpg", link: "https://drive.google.com/file/d/1_N9iHDAM3RbU2a0GTfgcNXDGuZDT_yZ-/preview" },
+  { category: "Movies", title: "Woody Woodpecker Goes to Camp", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/WWC.jpg", link: "https://drive.google.com/file/d/1rbeUdLuf25ywVxfbP42JDQuvFIoHqGkQ/preview" },
+  { category: "Movies", title: "Imaginary", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/IMA.jpg", link: "https://drive.google.com/file/d/1fuFg1QpZAwYFPh0VOqfhTDxctdqFGbjU/preview" },
+  { category: "Movies", title: "Home Alone", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/HA.jpg", link: "https://drive.google.com/file/d/18YKNCTokG3B7ZWzCE3thunyDJMktLxnm/preview" },
+  { category: "Movies", title: "Home Alone 2", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/HA2.jpg", link: "https://drive.google.com/file/d/1Aj4Ys3ofogKhxEAMh6PUncpYF_OHZ_ZK/preview" },
+  { category: "Movies", title: "Twister", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/T.jpg", link: "https://drive.google.com/file/d/1fI-5Fj9UnOhN-MTIRi17j0u_4o-mX3II/preview" },
+  { category: "Movies", title: "Atomic Twister", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/AT.jpg", link: "https://drive.google.com/file/d/17_XUxmKASt0nWlxEC357z3i7CTXiiMD-/preview" },
+  { category: "Movies", title: "Finding Nemo", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/FN.jpg", link: "https://drive.google.com/file/d/11CN0fT7CwCHgz__mY4FWjcoT5w_wZD9S/preview" },
+
+
+  // { category: "Movies", title: "Blank", poster: "https://cdn.jsdelivr.net/gh/ThatOneGuy-67/Movies@main/Pics/Blank.jpg", link: "blank/preview" },
+
+];
+
+const content = document.getElementById("content");
+
+function loadMovies() {
+  content.innerHTML = "";
+
+  const categories = [...new Set(movies.map(m => m.category))];
+
+  categories.forEach(cat => {
+    const section = document.createElement("div");
+    section.className = "section";
+    section.innerHTML = `<h2>${cat}</h2><div class="movie-grid"></div>`;
+    content.appendChild(section);
+
+    const grid = section.querySelector(".movie-grid");
+
+    movies
+      .filter(m => m.category === cat)
+      .forEach((m, index) => {
+        const card = document.createElement("div");
+        card.className = "movie-card";
+        card.style.cursor = "pointer";
+        card.setAttribute("data-index", index);
+        card.setAttribute("data-show-data", JSON.stringify({
+          title: m.title,
+          poster: m.poster,
+          description: m.description || `${m.title} is a great show with amazing content.`,
+          rating: m.rating || 8.5,
+          genres: m.genres || ["Drama", "Sci-Fi"],
+          status: m.status || "Ongoing",
+          episodes: m.episodes?.length || 10,
+          language: m.language || "English"
+        }));
+
+        let controls = "";
+
+        // If TV Show with episodes
+        if (m.episodes) {
+          controls = `
+            <select onchange="handleEpisodeSelect(this)" onclick="event.stopPropagation()">
+              <option value="">Select Episode</option>
+              ${m.episodes.map(ep =>
+                `<option value="${ep.link}">${ep.name}</option>`
+              ).join("")}
+            </select>
+          `;
+        }
+        // Regular movie
+        else {
+          controls = `
+            <button class="watch-btn" onclick="openVideo('${m.link}')">
+              Watch
+            </button>
+          `;
+        }
+
+        card.innerHTML = `
+          <img src="${m.poster}">
+          <div class="movie-info">
+            <h3>${m.title}</h3>
+            ${controls}
+          </div>
+        `;
+
+        // Add click handler AFTER setting innerHTML
+        if (m.episodes) {
+          card.onclick = () => showDetail(m);
+        }
+
+        grid.appendChild(card);
+      });
+  });
+}
+
+function handleEpisodeSelect(selectElement) {
+  const link = selectElement.value;
+  if (link) {
+    openVideo(link);
+    selectElement.selectedIndex = 0;
+  }
+}
+
+function openVideo(link) {
+  document.getElementById("videoFrame").src = link;
+  document.getElementById("videoModal").style.display = "flex";
+}
+
+function closeVideo() {
+  document.getElementById("videoFrame").src = "";
+  document.getElementById("videoModal").style.display = "none";
+}
+
+function showDetail(show) {
+  const modal = document.getElementById("detailModal");
+  document.getElementById("detailPoster").src = show.poster;
+  document.getElementById("detailTitle").textContent = show.title;
+  document.getElementById("detailDescription").textContent = show.description || 
+    `${show.title} is a great show with amazing content. Watch all episodes now!`;
+  document.getElementById("detailStars").textContent = show.rating ? 
+    "★".repeat(Math.floor(show.rating / 2)) + "☆".repeat(5 - Math.floor(show.rating / 2)) : 
+    "★★★★★";
+  document.getElementById("detailRating").textContent = (show.rating || 8.5) + "/10";
+  
+  const genreHtml = (show.genres || ["Drama", "Sci-Fi"]).map(g => 
+    `<span>${g}</span>`
+  ).join("");
+  document.getElementById("detailGenre").innerHTML = genreHtml;
+  
+  document.getElementById("detailEpisodes").textContent = (show.episodes?.length || 10) + " Episodes";
+  document.getElementById("detailType").textContent = "TV Show";
+  document.getElementById("detailStatus").textContent = show.status || "Ongoing";
+  document.getElementById("detailStatus").textContent = show.status || "Finished";
+  document.getElementById("detailLanguage").textContent = show.language || "English";
+
+  if (show.episodes && show.episodes.length > 0) {
+    const episodeSelect = document.createElement("select");
+    episodeSelect.innerHTML = `<option value="">Select Episode</option>` + 
+      show.episodes.map(ep => `<option value="${ep.link}">${ep.name}</option>`).join("");
+    episodeSelect.onchange = () => {
+      if (episodeSelect.value) {
+        openVideo(episodeSelect.value);
+        episodeSelect.selectedIndex = 0;
+      }
+    };
+    document.querySelector(".detail-buttons").appendChild(episodeSelect);
+  }
+  
+  const playBtn = document.getElementById("detailPlayBtn");
+  playBtn.onclick = () => {
+    if (show.episodes && show.episodes.length > 0) {
+      openVideo(show.episodes[0].link);
+    }
+  };
+  
+  modal.classList.add("active");
+}
+
+function closeDetail() {
+  const modal = document.getElementById("detailModal");
+  modal.classList.remove("active");
+}
+
+function searchMovies() {
+  let input = document.querySelector(".search-box").value.toLowerCase();
+
+  document.querySelectorAll(".movie-card").forEach(card => {
+    card.style.display =
+      card.innerText.toLowerCase().includes(input)
+        ? "block"
+        : "none";
+  });
+}
+
+</script>
+
+<script src="Tv.js"></script>
+
+<script>
+// Merge TV shows into movies array after Tv.js loads
+if (typeof tvShows !== 'undefined' && tvShows.length > 0) {
+  movies.push(...tvShows);
+}
+
+loadMovies();
+</script>
 
 </body>
 </html>
